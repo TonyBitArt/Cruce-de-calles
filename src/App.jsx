@@ -1,8 +1,8 @@
 import { useState } from "react";
-import TrafficLight from "./components/TrafficLight";
+import MainDashboard from "./layout/MainDashboard";
 
 function App() {
-  return <TrafficLight color="red" />;
+  return <MainDashboard />;
 }
 
 export default App;
