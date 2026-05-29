@@ -1,11 +1,8 @@
-import { useState } from 'react'
+import { useState } from "react";
+import MainDashboard from "./layout/MainDashboard";
 
 function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    console.log("Hola mundo")
-  )
+  return <MainDashboard />;
 }
 
-export default App
+export default App;
