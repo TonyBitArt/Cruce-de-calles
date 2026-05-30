@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Box, Typography, TextField, Button } from "@mui/material";
 import TrafficLight from "../components/TrafficLight";
 import PositiveNumberField from "../components/common/PositiveNumeberField";
-import intersectionImage from ".../public/InterseccionCalle";
+import intersectionImage from "../../public/InterseccionCalle.jpeg";
 
 export default function MainDashboard() {
   const [times, setTimes] = useState({ green: 1, yellow: 1, red: 1 });
@@ -92,7 +92,7 @@ export default function MainDashboard() {
           sx={{
             width: "1000px",
             height: "800px",
-            backgroundImage: "url(${intersectionImage})",
+            backgroundImage: `url(${intersectionImage})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
             position: "relative",
