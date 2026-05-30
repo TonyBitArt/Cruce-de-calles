@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import { Box, Typography, TextField, Button } from "@mui/material";
 import TrafficLight from "../components/TrafficLight";
+import PositiveNumberField from "../components/common/PositiveNumeberField";
 
 export default function MainDashboard() {
-  const [times, setTimes] = useState({ green: 6000, yellow: 2000, red: 4000 });
+  const [times, setTimes] = useState({ green: 1, yellow: 1, red: 1 });
   const [inputs, setInputs] = useState({ ...times });
   const [currentPhase, setCurrentPhase] = useState(1);
   const timerRef = useRef(null);
@@ -11,23 +12,26 @@ export default function MainDashboard() {
   useEffect(() => {
     if (timerRef.current) clearTimeout(timerRef.current);
 
-    let waitTime = 0;
-    if (currentPhase === 1 || currentPhase === 3) waitTime = times.green;
-    if (currentPhase === 2 || currentPhase === 4) waitTime = times.yellow;
+    const isGreenPhase = currentPhase % 2 !== 0;
+    const waitTime = isGreenPhase ? times.green : times.yellow;
 
     timerRef.current = setTimeout(() => {
       setCurrentPhase((previousPhase) => {
-        return previousPhase === 4 ? 1 : previousPhase + 1;
+        return previousPhase === 8 ? 1 : previousPhase + 1;
       });
-    }, waitTime);
+    }, waitTime * 1000);
 
     return () => clearTimeout(timerRef.current);
   }, [currentPhase, times]);
 
-  const colorNorthSouth =
+  const colorNorth =
     currentPhase === 1 ? "green" : currentPhase === 2 ? "yellow" : "red";
-  const colorEastWest =
+  const colorEast =
     currentPhase === 3 ? "green" : currentPhase === 4 ? "yellow" : "red";
+  const colorSouth =
+    currentPhase === 5 ? "green" : currentPhase === 6 ? "yellow" : "red";
+  const colorWest =
+    currentPhase === 7 ? "green" : currentPhase === 8 ? "yellow" : "red";
 
   const handleApplyConfiguration = () => {
     setTimes(inputs);
@@ -43,32 +47,25 @@ export default function MainDashboard() {
           Panel de configuracion
         </Typography>
 
-        <TextField
-          label="Tiempo de la luz verde (ms)"
-          type="number"
-          fullWidth
-          margin="normal"
+        <PositiveNumberField
+          label="Tiempo de la luz verde (segundos)"
           value={inputs.green}
-          onChange={(e) =>
-            setInputs({
-              ...inputs,
-              green: Number(e.target.value),
-            })
-          }
+          onChange={(newValue) => setInputs({ ...inputs, green: newValue })}
+          isDisabled={false}
         />
 
-        <TextField
-          label="Tiempo de la luz amarilla (ms)"
-          type="number"
-          fullWidth
-          margin="normal"
+        <PositiveNumberField
+          label="Tiempo de la luz amarilla (segundos)"
           value={inputs.yellow}
-          onChange={(e) =>
-            setInputs({
-              ...inputs,
-              yellow: Number(e.target.value),
-            })
-          }
+          onChange={(newValue) => setInputs({ ...inputs, yellow: newValue })}
+          isDisabled={false}
+        />
+
+        <PositiveNumberField
+          label="Tiempo de la luz roja (segundos)"
+          value={inputs.red}
+          onChange={(newValue) => setInputs({ ...inputs, red: newValue })}
+          isDisabled={false}
         />
 
         <Button
@@ -90,15 +87,11 @@ export default function MainDashboard() {
           alignItems: "center",
         }}
       >
-        <Typography variant="h4" gutterBottom>
-          Numero de fase: {currentPhase}
-        </Typography>
-
         <Box
           sx={{
-            width: "1735px",
-            height: "1777px",
-            backgroundImage: "url('/InerseccionCalle.jpeg')",
+            width: "1000px",
+            height: "800px",
+            backgroundImage: "url('/InterseccionCalle.jpeg')",
             backgroundSize: "cover",
             backgroundPosition: "center",
             position: "relative",
@@ -106,34 +99,48 @@ export default function MainDashboard() {
             borderRadius: "8px",
           }}
         >
-          <Box sx={{ position: "absolute", top: "10%", left: "30%" }}>
-            <TrafficLight color={colorNorthSouth} />
-          </Box>
-
-          <Box sx={{ position: "absolute", bottom: "10%", right: "30%" }}>
-            <TrafficLight color={colorNorthSouth} />
+          <Box
+            sx={{
+              position: "absolute",
+              top: "2%",
+              left: "25%",
+              transform: "scale(0.5)",
+            }}
+          >
+            <TrafficLight color={colorNorth} />
           </Box>
 
           <Box
             sx={{
               position: "absolute",
-              top: "30%",
-              right: "10%",
-              transform: "rotate(90deg)",
+              bottom: "2%",
+              right: "25%",
+              transform: "scale(0.5)",
             }}
           >
-            <TrafficLight color={colorEastWest} />
+            <TrafficLight color={colorSouth} />
           </Box>
 
           <Box
             sx={{
               position: "absolute",
-              bottom: "30%",
-              left: "10%",
-              transform: "rotate(-90deg)",
+              top: "8%",
+              right: "19%",
+              transform: "rotate(90deg) scale(0.5)",
             }}
           >
-            <TrafficLight color={colorEastWest} />
+            <TrafficLight color={colorEast} />
+          </Box>
+
+          <Box
+            sx={{
+              position: "absolute",
+              bottom: "9%",
+              left: "20%",
+              transform: "rotate(-90deg) scale(0.5)",
+            }}
+          >
+            <TrafficLight color={colorWest} />
           </Box>
         </Box>
       </Box>
